@@ -23,6 +23,12 @@ use Assetic\Asset\AssetInterface;
 class PhpCssEmbedFilter implements FilterInterface
 {
     private $presets = array();
+    private $root;
+
+    public function setRoot($root)
+    {
+        $this->root = $root;
+    }
 
     public function setPresets(array $presets)
     {
@@ -35,7 +41,9 @@ class PhpCssEmbedFilter implements FilterInterface
         $path = $asset->getSourcePath();
 
         $pce = new CssEmbed();
-        if ($root && $path) {
+        if ($this->root) {
+            $pce->setRootDir($this->root);
+        } else if ($root && $path) {
             $pce->setRootDir(dirname($root.'/'.$path));
         }
 
